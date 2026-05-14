@@ -152,6 +152,8 @@ html,body{width:100%;height:100%;font-family:-apple-system,'Segoe UI',Arial,sans
 .prod-price{font-size:14px;font-weight:800;color:#fde68a}
 .prod-add{width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,#6d28d9,#7c3aed);border:none;color:#fff;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .qty-ctrl{display:flex;align-items:center;gap:5px}
+.qty-inp{width:52px;background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.25);border-radius:5px;color:#c4b5fd;font-size:12.5px;font-weight:700;text-align:center;padding:2px 4px;font-family:inherit;outline:none}
+.qty-inp::-webkit-inner-spin-button,.qty-inp::-webkit-outer-spin-button{-webkit-appearance:none}
 .qty-val{font-size:12.5px;font-weight:700;color:#c4b5fd;min-width:16px;text-align:center}
 .qbtn{width:22px;height:22px;border-radius:5px;background:rgba(139,92,246,.2);border:1px solid rgba(139,92,246,.2);color:#c4b5fd;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .cart-box{position:sticky;top:0}
@@ -1121,7 +1123,7 @@ function renderProducts() {
         '<div class="prod-foot">'+
           '<span class="prod-price">'+fmtMoney(p.price)+'</span>'+
           (qty>0
-            ? '<div class="qty-ctrl"><button class="qbtn" data-id="'+p.id+'" onclick="updateQty(this.dataset.id,-1)">−</button><span class="qty-val">'+qty+'</span><button class="qbtn" data-id="'+p.id+'" onclick="updateQty(this.dataset.id,1)">+</button></div>'
+            ? '<div class="qty-ctrl"><button class="qbtn" data-id="'+p.id+'" onclick="updateQty(this.dataset.id,-1)">−</button><input type="number" class="qty-inp" data-id="'+p.id+'" value="'+qty+'" min="1" max="999999" onchange="setQty(this.dataset.id,this.value)" onclick="this.select()"><button class="qbtn" data-id="'+p.id+'" onclick="updateQty(this.dataset.id,1)">+</button></div>'
             : '<button class="prod-add" data-id="'+p.id+'" onclick="addToCart(this.dataset.id)">+</button>')+
         '</div>'+
       '</div>'+
@@ -1129,7 +1131,14 @@ function renderProducts() {
   }).join('') + '</div>';
 }
 
-function addToCart(pid) {
+function setQty(pid, val) {
+  var n = parseInt(val);
+  if(isNaN(n) || n < 1) n = 1;
+  if(n > 999999) n = 999999;
+  if(!cart[pid]) return;
+  cart[pid].qty = n;
+  renderProducts(); renderCart();
+}
   var p = null;
   for(var i=0;i<clientCatalog.length;i++){if(clientCatalog[i].id===pid){p=clientCatalog[i];break;}}
   if(!p) return;
@@ -1156,7 +1165,7 @@ function renderCart() {
         '<div class="cart-li-top"><span class="cart-li-name">'+esc(it.name)+'</span><span class="cart-li-px">'+fmtMoney(it.price)+' × '+it.qty+'</span></div>'+
         '<div class="cart-li-bot">'+
           '<button class="qbtn" data-id="'+it.id+'" onclick="updateQty(this.dataset.id,-1)">−</button>'+
-          '<span class="qty-val">'+it.qty+'</span>'+
+          '<input type="number" class="qty-inp" data-id="'+it.id+'" value="'+it.qty+'" min="1" max="999999" onchange="setQty(this.dataset.id,this.value)" onclick="this.select()">'+
           '<button class="qbtn" data-id="'+it.id+'" onclick="updateQty(this.dataset.id,1)">+</button>'+
           '<span class="cart-li-sub">'+fmtMoney(it.qty*it.price)+'</span>'+
         '</div>'+
