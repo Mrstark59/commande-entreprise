@@ -1139,6 +1139,7 @@ function setQty(pid, val) {
   cart[pid].qty = n;
   renderProducts(); renderCart();
 }
+function addToCart(pid) {
   var p = null;
   for(var i=0;i<clientCatalog.length;i++){if(clientCatalog[i].id===pid){p=clientCatalog[i];break;}}
   if(!p) return;
