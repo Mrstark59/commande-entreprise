@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LTD Grove Street</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;font-family:-apple-system,'Segoe UI',Arial,sans-serif;background:#0d0721;color:#f1f5f9}
+.hidden{display:none!important}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:rgba(139,92,246,.3);border-radius:4px}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:8px 16px;border-radius:7px;border:1px solid transparent;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;transition:opacity .15s}
+.btn:hover{opacity:.82}.btn:active{transform:scale(.98)}.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.btn-p{background:linear-gradient(135deg,#6d28d9,#7c3aed);color:#fff}
+.btn-s{background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.25);color:#c4b5fd}
+.btn-d{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:#fca5a5}
+.btn-g{background:linear-gradient(135deg,#b7860b,#d4af37);color:#fff}
+.btn-sm{padding:5px 10px;font-size:11px}
+.btn-full{width:100%;justify-content:center}
+.fg{display:flex;flex-direction:column;margin-bottom:12px}
+.fg label{font-size:9.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:rgba(196,181,253,.4);margin-bottom:5px}
+.fg input,.fg textarea,.fg select{background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.2);border-radius:7px;padding:9px 12px;color:#f1f5f9;font-size:13px;font-family:inherit;outline:none;width:100%}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:#a78bfa}
+.fg input::placeholder,.fg textarea::placeholder{color:rgba(196,181,253,.25)}
+.fg select option{background:#130b2e}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tog{position:relative;display:inline-block;width:38px;height:20px;flex-shrink:0}
+.tog input{opacity:0;width:0;height:0}
+.tog-sl{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(255,255,255,.1);border:1px solid rgba(139,92,246,.2);border-radius:20px;cursor:pointer;transition:.2s}
+.tog-sl::before{content:'';position:absolute;height:12px;width:12px;left:3px;top:3px;background:rgba(196,181,253,.4);border-radius:50%;transition:.2s}
+.tog input:checked+.tog-sl{background:rgba(124,58,237,.3);border-color:#a78bfa}
+.tog input:checked+.tog-sl::before{transform:translateX(18px);background:#a78bfa}
+.bdg{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700}
+.bw{background:rgba(245,158,11,.1);color:#fbbf24;border:1px solid rgba(245,158,11,.2)}
+.bp{background:rgba(99,102,241,.1);color:#a5b4fc;border:1px solid rgba(99,102,241,.2)}
+.bd{background:rgba(16,185,129,.1);color:#34d399;border:1px solid rgba(16,185,129,.2)}
+.bc{background:rgba(239,68,68,.1);color:#fca5a5;border:1px solid rgba(239,68,68,.2)}
+.ba{background:rgba(16,185,129,.1);color:#34d399;border:1px solid rgba(16,185,129,.2)}
+.bi{background:rgba(255,255,255,.06);color:rgba(196,181,253,.4);border:1px solid rgba(255,255,255,.08)}
+.card{background:rgba(20,10,48,.95);border:1px solid rgba(139,92,246,.2);border-radius:12px;padding:16px;margin-bottom:14px}
+.card-title{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(196,181,253,.4);margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid rgba(139,92,246,.1)}
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:rgba(196,181,253,.35);padding:0 10px 10px;text-align:left}
+.tbl td{padding:10px;font-size:12.5px;border-bottom:1px solid rgba(139,92,246,.07);color:#f1f5f9;vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:rgba(139,92,246,.05)}
+.tbl td.sm{color:rgba(196,181,253,.6);font-size:11px}
+.acts{display:flex;gap:5px;flex-wrap:wrap}
+.spin-wrap{display:flex;justify-content:center;padding:40px}
+.spin{width:28px;height:28px;border:2px solid rgba(139,92,246,.2);border-top-color:#a78bfa;border-radius:50%;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+#modal-ov{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(5,2,15,.85);z-index:1000;display:none;align-items:center;justify-content:center}
+#modal-ov.open{display:flex}
+.modal-box{background:#130b2e;border:1px solid rgba(139,92,246,.35);border-radius:14px;width:500px;max-width:95%;max-height:88%;display:flex;flex-direction:column}
+.modal-box.lg{width:680px}
+.modal-hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(139,92,246,.15)}
+.modal-hdr h3{font-size:14px;font-weight:700;color:#f1f5f9}
+.modal-x{background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.2);border-radius:6px;color:rgba(196,181,253,.5);width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px}
+.modal-body{padding:18px;overflow-y:auto;flex:1}
+.modal-foot{padding:12px 18px;border-top:1px solid rgba(139,92,246,.1);display:flex;gap:8px;justify-content:flex-end}
+#toast-ct{position:fixed;bottom:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:7px;pointer-events:none}
+.toast{padding:10px 15px;border-radius:8px;font-size:12.5px;font-weight:600;border:1px solid}
+.tok{background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.3);color:#6ee7b7}
+.ter{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.3);color:#fca5a5}
+.tin{background:rgba(99,102,241,.12);border-color:rgba(99,102,241,.3);color:#a5b4fc}
+#s-login{width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative}
+.login-bg{position:absolute;top:0;left:0;right:0;bottom:0;background-image:url('ltd.png');background-size:cover;background-position:center;opacity:.15}
+.login-card{position:relative;z-index:1;background:rgba(20,10,48,.97);border:1px solid rgba(139,92,246,.35);border-radius:18px;padding:40px 36px;width:370px;max-width:95%}
+.login-logo{text-align:center;margin-bottom:8px}
+.login-logo img{width:110px;height:110px;object-fit:contain;border-radius:50%}
+.login-brand{text-align:center;margin-bottom:28px}
+.login-brand h1{font-size:19px;font-weight:800;color:#f1f5f9;margin-bottom:4px}
+.login-brand p{font-size:9.5px;letter-spacing:3px;text-transform:uppercase;color:rgba(196,181,253,.35)}
+.login-err{margin-top:10px;padding:9px 12px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);border-radius:7px;color:#fca5a5;font-size:12px;text-align:center}
+.login-foot{text-align:center;margin-top:20px;font-size:9.5px;color:rgba(196,181,253,.2)}
+#s-admin{display:flex;width:100%;height:100%;overflow:hidden}
+.sb{width:220px;min-width:220px;height:100%;background:rgba(11,6,28,.98);border-right:1px solid rgba(139,92,246,.15);display:flex;flex-direction:column;overflow-y:auto}
+.sb-brand{padding:18px 14px 16px;border-bottom:1px solid rgba(139,92,246,.12)}
+.sb-logo-row{display:flex;align-items:center;gap:9px}
+.sb-logo-box{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#4c1d95,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0}
+.sb-brand h2{font-size:12.5px;font-weight:700;color:#f1f5f9}
+.sb-brand p{font-size:9px;color:rgba(196,181,253,.3);margin-top:1px}
+.sb-sec{font-size:8.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(196,181,253,.25);padding:12px 14px 4px}
+.sb-nav{padding:0 7px;flex:1}
+.sb-it{display:flex;align-items:center;gap:8px;width:100%;padding:8px 9px;border-radius:8px;border:1px solid transparent;background:transparent;color:rgba(196,181,253,.5);font-family:inherit;font-size:12.5px;font-weight:500;cursor:pointer;text-align:left;margin-bottom:1px;transition:all .15s;position:relative}
+.sb-it:hover{background:rgba(139,92,246,.1);color:#c4b5fd}
+.sb-it.on{background:rgba(139,92,246,.15);color:#c4b5fd;border-color:rgba(139,92,246,.22)}
+.sb-it.on::before{content:'';position:absolute;left:-1px;top:50%;transform:translateY(-50%);width:3px;height:16px;background:linear-gradient(180deg,#a78bfa,#6d28d9);border-radius:0 3px 3px 0}
+.sb-ico{font-size:13px;width:17px;text-align:center}
+.sb-bdg{background:rgba(239,68,68,.2);color:#fca5a5;border:1px solid rgba(239,68,68,.3);font-size:8.5px;font-weight:700;padding:1px 6px;border-radius:20px;margin-left:auto}
+.sb-foot{padding:10px 7px;border-top:1px solid rgba(139,92,246,.1)}
+.sb-user{display:flex;align-items:center;gap:8px;padding:8px 9px;border-radius:8px;background:rgba(139,92,246,.07);border:1px solid rgba(139,92,246,.12);margin-bottom:7px}
+.sb-av{width:28px;height:28px;border-radius:7px;background:linear-gradient(135deg,#7c3aed,#a78bfa);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0}
+.sb-uname{font-size:12px;font-weight:600;color:#f1f5f9}
+.sb-urole{font-size:9px;color:rgba(196,181,253,.35)}
+.admin-main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.admin-hdr{background:rgba(11,6,28,.98);border-bottom:1px solid rgba(139,92,246,.12);padding:0 20px;height:54px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.admin-hdr h1{font-size:15px;font-weight:700;color:#f1f5f9}
+.admin-cnt{flex:1;overflow-y:auto;padding:18px 20px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.stat{background:rgba(20,10,48,.95);border:1px solid rgba(139,92,246,.18);border-radius:11px;padding:14px;position:relative;overflow:hidden}
+.stat-ico{font-size:18px;margin-bottom:6px}
+.stat-val{font-size:22px;font-weight:800;color:#f1f5f9;letter-spacing:-1px}
+.stat-lbl{font-size:9.5px;color:rgba(196,181,253,.35);margin-top:4px}
+.stat.hl .stat-val{color:#fde68a}
+.g2{display:grid;grid-template-columns:1.5fr 1fr;gap:12px;margin-bottom:14px}
+.cpick{display:flex;gap:8px;margin-top:4px}
+.copt{width:26px;height:26px;border-radius:6px;cursor:pointer;border:2px solid transparent;transition:all .15s}
+.copt[data-c=purple]{background:rgba(139,92,246,.5)}.copt[data-c=cyan]{background:rgba(34,211,238,.5)}.copt[data-c=gold]{background:rgba(245,158,11,.5)}.copt[data-c=red]{background:rgba(239,68,68,.5)}
+.copt.sel{border-color:#fff;transform:scale(1.15)}
+.ann-purple{background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.25);color:#c4b5fd;border-radius:8px;padding:9px 13px;margin-bottom:6px;font-size:13px}
+.ann-cyan{background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.2);color:#67e8f9;border-radius:8px;padding:9px 13px;margin-bottom:6px;font-size:13px}
+.ann-gold{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);color:#fcd34d;border-radius:8px;padding:9px 13px;margin-bottom:6px;font-size:13px}
+.ann-red{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:#fca5a5;border-radius:8px;padding:9px 13px;margin-bottom:6px;font-size:13px}
+.contact-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}
+.contact-card{background:rgba(20,10,48,.95);border:1px solid rgba(139,92,246,.18);border-radius:10px;padding:12px;display:flex;align-items:center;gap:9px}
+.contact-av{width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,#7c3aed,#a78bfa);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0}
+.contact-info{flex:1;min-width:0}
+.contact-info strong{font-size:12.5px;font-weight:600;color:#f1f5f9;display:block}
+.contact-info p{font-size:11px;color:rgba(196,181,253,.5);margin-top:1px}
+#s-client{display:flex;flex-direction:column;width:100%;height:100%;overflow:hidden}
+.cl-hdr{background:rgba(11,6,28,.98);border-bottom:1px solid rgba(139,92,246,.15);padding:0 20px;height:52px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.cl-brand{display:flex;align-items:center;gap:9px}
+.cl-brand img{width:30px;height:30px;object-fit:contain;border-radius:7px}
+.cl-brand h1{font-size:14px;font-weight:700;color:#f1f5f9}
+.co-badge{background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.25);border-radius:20px;padding:4px 12px;font-size:11.5px;font-weight:600;color:#c4b5fd}
+.cl-tabs{background:rgba(11,6,28,.9);border-bottom:1px solid rgba(139,92,246,.1);display:flex;padding:0 20px;height:42px;align-items:flex-end;flex-shrink:0;gap:2px}
+.cl-tab{padding:0 14px 9px;font-size:12.5px;font-weight:600;color:rgba(196,181,253,.35);cursor:pointer;background:none;border:none;font-family:inherit;position:relative;transition:color .15s}
+.cl-tab:hover{color:rgba(196,181,253,.7)}
+.cl-tab.on{color:#c4b5fd}
+.cl-tab.on::after{content:'';position:absolute;bottom:0;left:14px;right:14px;height:2px;background:linear-gradient(90deg,#a78bfa,#7c3aed);border-radius:2px}
+.cl-body{flex:1;overflow-y:auto;padding:16px 18px}
+#ann-bar{margin-bottom:12px}
+.cat-filters{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.search-box{flex:1;min-width:160px;background:rgba(139,92,246,.07);border:1px solid rgba(139,92,246,.18);border-radius:8px;padding:8px 12px;color:#f1f5f9;font-size:12.5px;font-family:inherit;outline:none}
+.search-box::placeholder{color:rgba(196,181,253,.25)}
+.search-box:focus{border-color:#a78bfa}
+.pills{display:flex;gap:6px;flex-wrap:wrap}
+.pill{padding:5px 13px;border-radius:20px;font-size:11px;font-weight:600;border:1px solid rgba(139,92,246,.18);background:transparent;color:rgba(196,181,253,.4);cursor:pointer;font-family:inherit}
+.pill.on{background:rgba(139,92,246,.15);border-color:rgba(139,92,246,.35);color:#c4b5fd}
+.cart-layout{display:grid;grid-template-columns:1fr 300px;gap:16px;align-items:start}
+.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:10px}
+.prod-card{background:rgba(20,10,48,.95);border:1px solid rgba(139,92,246,.18);border-radius:11px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .2s}
+.prod-card:hover{border-color:rgba(139,92,246,.4)}
+.prod-img{width:100%;height:100px;object-fit:cover;display:block}
+.prod-img-ph{width:100%;height:100px;background:rgba(139,92,246,.06);display:flex;align-items:center;justify-content:center;font-size:28px}
+.prod-body{padding:11px 12px;flex:1;display:flex;flex-direction:column}
+.prod-cat{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(196,181,253,.35);margin-bottom:3px}
+.prod-name{font-size:13px;font-weight:700;color:#f1f5f9;margin-bottom:3px}
+.prod-desc{font-size:11px;color:rgba(196,181,253,.5);margin-bottom:8px;flex:1;line-height:1.4}
+.prod-foot{display:flex;align-items:center;justify-content:space-between}
+.prod-price{font-size:14px;font-weight:800;color:#fde68a}
+.prod-add{width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,#6d28d9,#7c3aed);border:none;color:#fff;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.qty-ctrl{display:flex;align-items:center;gap:5px}
+.qty-val{font-size:12.5px;font-weight:700;color:#c4b5fd;min-width:16px;text-align:center}
+.qbtn{width:22px;height:22px;border-radius:5px;background:rgba(139,92,246,.2);border:1px solid rgba(139,92,246,.2);color:#c4b5fd;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.cart-box{position:sticky;top:0}
+.cart-card{background:rgba(20,10,48,.95);border:1px solid rgba(139,92,246,.2);border-radius:12px;overflow:hidden}
+.cart-hdr2{display:flex;align-items:center;justify-content:space-between;padding:13px 15px;border-bottom:1px solid rgba(139,92,246,.1)}
+.cart-hdr2 h3{font-size:13.5px;font-weight:700;color:#f1f5f9}
+.cart-cnt{background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.2);color:#c4b5fd;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:20px}
+.cart-list{padding:9px 14px;max-height:180px;overflow-y:auto}
+.cart-empty{text-align:center;padding:18px;color:rgba(196,181,253,.3);font-size:12px;font-style:italic}
+.cart-li{display:flex;flex-direction:column;gap:4px;padding:8px 0;border-bottom:1px solid rgba(139,92,246,.07)}
+.cart-li:last-child{border-bottom:none}
+.cart-li-top{display:flex;justify-content:space-between;align-items:center}
+.cart-li-name{font-size:12px;font-weight:600;color:#f1f5f9}
+.cart-li-px{font-size:10.5px;color:rgba(196,181,253,.4)}
+.cart-li-bot{display:flex;align-items:center;gap:5px}
+.cart-li-sub{font-size:12px;font-weight:700;color:#fde68a;margin-left:auto}
+.cart-tot-bar{display:flex;align-items:center;justify-content:space-between;padding:11px 15px;border-top:1px solid rgba(139,92,246,.1);background:rgba(139,92,246,.04)}
+.cart-tot-lbl{font-size:11px;color:rgba(196,181,253,.5);font-weight:600}
+.cart-tot-val{font-size:17px;font-weight:800;color:#fde68a}
+.cart-form{padding:13px 15px}
+.cart-form-ttl{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(196,181,253,.35);margin-bottom:10px}
+.ord-card{background:rgba(20,10,48,.95);border:1px solid rgba(139,92,246,.18);border-radius:11px;margin-bottom:10px;overflow:hidden;transition:border-color .2s}
+.ord-card:hover{border-color:rgba(139,92,246,.3)}
+.ord-card-hdr{display:flex;align-items:center;justify-content:space-between;padding:13px 15px;border-bottom:1px solid rgba(139,92,246,.07)}
+.ord-num{font-size:13.5px;font-weight:700;color:#f1f5f9}
+.ord-date{font-size:10.5px;color:rgba(196,181,253,.35);margin-top:2px}
+.ord-right{display:flex;align-items:center;gap:10px}
+.ord-total{font-size:14px;font-weight:800;color:#fde68a}
+.ord-items-row{display:flex;flex-wrap:wrap;gap:5px;padding:10px 15px;border-bottom:1px solid rgba(139,92,246,.06)}
+.ord-chip{background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.18);border-radius:20px;padding:2px 9px;font-size:10.5px;font-weight:600;color:#c4b5fd}
+.ord-actions{padding:9px 15px}
+.realtime-dot{width:7px;height:7px;border-radius:50%;background:#34d399;display:inline-block;margin-right:5px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.cat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.cat-item{background:rgba(20,10,48,.95);border:1px solid rgba(139,92,246,.15);border-radius:9px;padding:12px;transition:all .15s}
+.cat-item.on{border-color:rgba(139,92,246,.4);background:rgba(139,92,246,.08)}
+.cat-item-hdr{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+.cat-name{font-size:13px;font-weight:600;color:#f1f5f9;flex:1}
+.cat-price-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.cat-base{font-size:11px;color:rgba(196,181,253,.4)}
+.cat-price-inp{width:100px;background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.2);border-radius:6px;padding:5px 8px;color:#f1f5f9;font-size:12px;font-family:inherit;outline:none}
+.cat-price-inp:disabled{opacity:.3}
+.status-sel{background:rgba(20,10,48,.95);border:1px solid rgba(139,92,246,.2);border-radius:20px;color:#f1f5f9;font-size:10px;font-weight:700;padding:3px 8px;cursor:pointer;font-family:inherit;outline:none}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="s-login">
+  <div class="login-bg"></div>
+  <div class="login-card">
+    <div class="login-logo"><img src="logo.jpeg" alt="LTD" onerror="this.style.display='none'"></div>
+    <div class="login-brand"><h1>LTD Grove Street</h1><p>Quality &bull; Respect &bull; Loyalty</p></div>
+    <div class="fg"><label>Identifiant</label><input type="text" id="l-user" placeholder="Votre identifiant" autocomplete="off"></div>
+    <div class="fg"><label>Mot de passe</label><input type="password" id="l-pass" placeholder="••••••••" autocomplete="off"></div>
+    <button class="btn btn-p btn-full" id="login-btn" onclick="doLogin()" style="padding:12px;font-size:13.5px">Connexion</button>
+    <div id="l-err" class="login-err hidden"></div>
+    <div class="login-foot">&copy; LTD Grove Street — Est. March 2026</div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="s-admin" class="hidden">
+  <nav class="sb">
+    <div class="sb-brand">
+      <div class="sb-logo-row">
+        <div class="sb-logo-box">LTD</div>
+        <div><h2>LTD Grove Street</h2><p>Administration</p></div>
+      </div>
+    </div>
+    <div class="sb-sec">Navigation</div>
+    <div class="sb-nav">
+      <button class="sb-it on" data-sec="dashboard" onclick="goSec(this)"><span class="sb-ico">📊</span>Dashboard</button>
+      <button class="sb-it" data-sec="clients" onclick="goSec(this)"><span class="sb-ico">🏢</span>Entreprises</button>
+      <button class="sb-it" data-sec="products" onclick="goSec(this)"><span class="sb-ico">📦</span>Articles</button>
+      <button class="sb-it" data-sec="catalog" onclick="goSec(this)"><span class="sb-ico">📋</span>Catalogues</button>
+      <button class="sb-it" data-sec="orders" onclick="goSec(this)"><span class="sb-ico">🛒</span>Commandes<span class="sb-bdg hidden" id="pend-bdg">0</span></button>
+      <button class="sb-it" data-sec="announcements" onclick="goSec(this)"><span class="sb-ico">📢</span>Annonces</button>
+      <button class="sb-it" data-sec="contacts" onclick="goSec(this)"><span class="sb-ico">📞</span>Annuaire</button>
+      <button class="sb-it" data-sec="settings" onclick="goSec(this)"><span class="sb-ico">⚙️</span>Paramètres</button>
+    </div>
+    <div class="sb-foot">
+      <div class="sb-user">
+        <div class="sb-av">A</div>
+        <div><div class="sb-uname">admin</div><div class="sb-urole">Administrateur</div></div>
+      </div>
+      <button class="btn btn-d btn-full btn-sm" onclick="doLogout()">🚪 Déconnexion</button>
+    </div>
+  </nav>
+  <main class="admin-main">
+    <header class="admin-hdr">
+      <h1 id="page-title">Dashboard</h1>
+      <div id="hdr-act"></div>
+    </header>
+    <div class="admin-cnt" id="admin-cnt"></div>
+  </main>
+</div>
+
+<!-- CLIENT -->
+<div id="s-client" class="hidden">
+  <header class="cl-hdr">
+    <div class="cl-brand">
+      <img src="logo.jpeg" onerror="this.style.display='none'" style="width:30px;height:30px;object-fit:contain;border-radius:7px">
+      <h1>LTD Grove Street</h1>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <span class="co-badge" id="co-badge">Entreprise</span>
+      <button class="btn btn-d btn-sm" onclick="doLogout()">🚪 Quitter</button>
+    </div>
+  </header>
+  <nav class="cl-tabs">
+    <button class="cl-tab on" data-tab="order" onclick="goTab(this)">🛒 Commander</button>
+    <button class="cl-tab" data-tab="history" onclick="goTab(this)">📋 Historique</button>
+    <button class="cl-tab" data-tab="contacts" onclick="goTab(this)">📞 Contacts LTD</button>
+  </nav>
+  <div class="cl-body">
+    <div id="ann-bar"></div>
+    <div id="tab-order"></div>
+    <div id="tab-history" class="hidden"></div>
+    <div id="tab-contacts" class="hidden"></div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div id="modal-ov" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box" id="modal-box">
+    <div class="modal-hdr"><h3 id="modal-title"></h3><div class="modal-x" onclick="closeModal()">✕</div></div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-foot" id="modal-foot"></div>
+  </div>
+</div>
+<div id="toast-ct"></div>
+
+<script>
+'use strict';
+
+/* ════════════════════════════════════════
+   CONFIG
+════════════════════════════════════════ */
+var SB_URL  = 'https://ybtcxiuipjsjquhyuvkp.supabase.co';
+var SB_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlidGN4aXVpcGpzanF1aHl1dmtwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3NTg1NzcsImV4cCI6MjA5NDMzNDU3N30.n1C1vMsLSIrwIMInKu0NLaS3tzqDXNBDF3CQLJTE60Y';
+var DISCORD = 'https://discord.com/api/webhooks/1502419811978711040/MxEZN3Xqm3h4hHcn7CQ4ngPM_WT9qdr0JVv6zS6nQ8teEgleGdvP0rLAKs70cgr6rqU3';
+var ADMIN   = { username: 'admin', password: 'marcadmin59' }; // Change ici
+
+/* ════════════════════════════════════════
+   SUPABASE REST API
+════════════════════════════════════════ */
+var HDR = {
+  'apikey': SB_KEY,
+  'Authorization': 'Bearer ' + SB_KEY,
+  'Content-Type': 'application/json',
+  'Prefer': 'return=representation'
+};
+
+function sbUrl(table, query) {
+  return SB_URL + '/rest/v1/' + table + (query ? '?' + query : '');
+}
+
+function sbGet(table, query) {
+  return fetch(sbUrl(table, query), { headers: HDR }).then(function(r) { return r.json(); });
+}
+
+function sbPost(table, data) {
+  return fetch(sbUrl(table), { method: 'POST', headers: HDR, body: JSON.stringify(data) }).then(function(r) { return r.json(); });
+}
+
+function sbPatch(table, query, data) {
+  return fetch(sbUrl(table, query), { method: 'PATCH', headers: HDR, body: JSON.stringify(data) }).then(function(r) { return r.json(); });
+}
+
+function sbDelete(table, query) {
+  return fetch(sbUrl(table, query), { method: 'DELETE', headers: HDR });
+}
+
+/* ════════════════════════════════════════
+   HELPERS
+════════════════════════════════════════ */
+function esc(s) { if(!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+function fmtMoney(v) { return (parseFloat(v)||0).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+' €'; }
+function fmtDate(s) { if(!s) return '—'; var d=new Date(s); return isNaN(d)?s:d.toLocaleDateString('fr-FR'); }
+function fmtDT(s) { if(!s) return '—'; var d=new Date(s); if(isNaN(d)) return s; return d.toLocaleDateString('fr-FR')+' '+d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}); }
+function nowStr() { return new Date().toLocaleString('fr-FR'); }
+
+function statusBadge(s) {
+  var m = { pending:['bw','⏳ Attente'], preparing:['bp','🔧 Prép.'], delivered:['bd','✅ Livrée'], cancelled:['bc','❌ Annulée'] };
+  var r = m[s] || ['bi', s];
+  return '<span class="bdg '+r[0]+'">'+r[1]+'</span>';
+}
+
+function toast(msg, type) {
+  var ct = document.getElementById('toast-ct');
+  var t = document.createElement('div');
+  t.className = 'toast t'+(type==='ok'?'ok':type==='err'?'er':'in');
+  t.textContent = msg;
+  ct.appendChild(t);
+  setTimeout(function() { if(t.parentNode) t.parentNode.removeChild(t); }, 3500);
+}
+
+function openModal(title, body, foot, lg) {
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-body').innerHTML = body;
+  document.getElementById('modal-foot').innerHTML = foot || '<button class="btn btn-s" onclick="closeModal()">Fermer</button>';
+  document.getElementById('modal-box').classList.toggle('lg', !!lg);
+  document.getElementById('modal-ov').classList.add('open');
+}
+function closeModal() { document.getElementById('modal-ov').classList.remove('open'); }
+
+/* ════════════════════════════════════════
+   AUTH
+════════════════════════════════════════ */
+var currentUser = null;
+var cart = {};
+var realtimeInterval = null;
+
+function doLogin() {
+  var u = document.getElementById('l-user').value.trim();
+  var p = document.getElementById('l-pass').value;
+  var err = document.getElementById('l-err');
+  var btn = document.getElementById('login-btn');
+  err.classList.add('hidden');
+  if(!u || !p) { err.textContent = 'Remplissez tous les champs'; err.classList.remove('hidden'); return; }
+  btn.disabled = true; btn.textContent = 'Connexion…';
+  if(u === ADMIN.username && p === ADMIN.password) {
+    currentUser = { role: 'admin', username: u };
+    btn.disabled = false; btn.textContent = 'Connexion';
+    showAdmin(); return;
+  }
+  sbGet('clients', 'username=eq.'+encodeURIComponent(u)+'&password=eq.'+encodeURIComponent(p)+'&select=*').then(function(data) {
+    btn.disabled = false; btn.textContent = 'Connexion';
+    if(data && data.length) {
+      currentUser = { role: 'client', data: data[0] };
+      showClient(data[0]);
+    } else {
+      err.textContent = 'Identifiants incorrects';
+      err.classList.remove('hidden');
+    }
+  }).catch(function() {
+    btn.disabled = false; btn.textContent = 'Connexion';
+    err.textContent = 'Erreur de connexion — réessayez';
+    err.classList.remove('hidden');
+  });
+}
+
+document.getElementById('l-pass').addEventListener('keydown', function(e) { if(e.key==='Enter') doLogin(); });
+document.getElementById('l-user').addEventListener('keydown', function(e) { if(e.key==='Enter') doLogin(); });
+
+function doLogout() {
+  currentUser = null; cart = {};
+  if(realtimeInterval) { clearInterval(realtimeInterval); realtimeInterval = null; }
+  document.getElementById('s-admin').classList.add('hidden');
+  document.getElementById('s-client').classList.add('hidden');
+  document.getElementById('s-login').classList.remove('hidden');
+  document.getElementById('l-user').value = '';
+  document.getElementById('l-pass').value = '';
+}
+
+function showAdmin() {
+  document.getElementById('s-login').classList.add('hidden');
+  document.getElementById('s-admin').classList.remove('hidden');
+  goSec(document.querySelector('.sb-it[data-sec="dashboard"]'));
+  startAdminRealtime();
+}
+
+function showClient(client) {
+  document.getElementById('s-login').classList.add('hidden');
+  document.getElementById('s-client').classList.remove('hidden');
+  document.getElementById('co-badge').textContent = client.company;
+  cart = {};
+  loadAnnouncements();
+  goTab(document.querySelector('.cl-tab[data-tab="order"]'));
+}
+
+/* ════════════════════════════════════════
+   ADMIN NAVIGATION
+════════════════════════════════════════ */
+var curSec = 'dashboard';
+function goSec(btn) {
+  curSec = btn.dataset.sec;
+  document.querySelectorAll('.sb-it').forEach(function(b) { b.classList.toggle('on', b === btn); });
+  var titles = { dashboard:'📊 Dashboard', clients:'🏢 Entreprises', products:'📦 Articles', catalog:'📋 Catalogues', orders:'🛒 Commandes', announcements:'📢 Annonces', contacts:'📞 Annuaire', settings:'⚙️ Paramètres' };
+  document.getElementById('page-title').textContent = titles[curSec] || curSec;
+  document.getElementById('hdr-act').innerHTML = '';
+  var fns = { dashboard:loadDashboard, clients:loadClients, products:loadProducts, catalog:loadCatalogSection, orders:loadOrders, announcements:loadAnnAdmin, contacts:loadContacts, settings:loadSettings };
+  if(fns[curSec]) fns[curSec]();
+}
+
+/* ════════════════════════════════════════
+   REALTIME (polling toutes les 8s)
+════════════════════════════════════════ */
+function startAdminRealtime() {
+  updatePendingBadge();
+  realtimeInterval = setInterval(function() {
+    updatePendingBadge();
+    if(curSec === 'orders') loadOrders();
+    if(curSec === 'dashboard') loadDashboard();
+  }, 8000);
+}
+
+function startClientRealtime() {
+  if(realtimeInterval) clearInterval(realtimeInterval);
+  realtimeInterval = setInterval(function() {
+    if(document.getElementById('tab-history') && !document.getElementById('tab-history').classList.contains('hidden')) {
+      renderHistory();
+    }
+  }, 8000);
+}
+
+function updatePendingBadge() {
+  sbGet('orders', 'status=eq.pending&select=id').then(function(data) {
+    var n = data ? data.length : 0;
+    var b = document.getElementById('pend-bdg');
+    if(b) { b.textContent = n; b.classList.toggle('hidden', n === 0); }
+  });
+}
+
+/* ════════════════════════════════════════
+   DASHBOARD
+════════════════════════════════════════ */
+function loadDashboard() {
+  var cnt = document.getElementById('admin-cnt');
+  cnt.innerHTML = '<div class="spin-wrap"><div class="spin"></div></div>';
+  Promise.all([
+    sbGet('clients', 'select=id'),
+    sbGet('products', 'active=eq.true&select=id'),
+    sbGet('orders', 'status=eq.pending&select=id'),
+    sbGet('orders', 'status=eq.delivered&select=total'),
+    sbGet('orders', 'select=*,clients(company)&order=created_at.desc&limit=5')
+  ]).then(function(r) {
+    var nClients = r[0] ? r[0].length : 0;
+    var nProds   = r[1] ? r[1].length : 0;
+    var nPend    = r[2] ? r[2].length : 0;
+    var revenue  = r[3] ? r[3].reduce(function(s,o){ return s+(parseFloat(o.total)||0); },0) : 0;
+    var recent   = r[4] || [];
+    cnt.innerHTML =
+      '<div class="stats">'+
+        '<div class="stat"><div class="stat-ico">🏢</div><div class="stat-val">'+nClients+'</div><div class="stat-lbl">Entreprises</div></div>'+
+        '<div class="stat"><div class="stat-ico">📦</div><div class="stat-val">'+nProds+'</div><div class="stat-lbl">Articles actifs</div></div>'+
+        '<div class="stat hl"><div class="stat-ico">⏳</div><div class="stat-val">'+nPend+'</div><div class="stat-lbl">En attente</div></div>'+
+        '<div class="stat"><div class="stat-ico">💰</div><div class="stat-val">'+fmtMoney(revenue)+'</div><div class="stat-lbl">CA livré</div></div>'+
+      '</div>'+
+      '<div class="card"><div class="card-title"><span class="realtime-dot"></span>Dernières commandes — temps réel</div>'+
+      '<div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Entreprise</th><th>Contact</th><th>Total</th><th>Statut</th><th>Date</th></tr></thead><tbody>'+
+      (recent.length ? recent.map(function(o) {
+        var co = o.clients ? o.clients.company : (o.company||'—');
+        return '<tr><td><strong>'+esc(co)+'</strong></td><td class="sm">'+esc(o.first_name+' '+o.last_name)+'</td><td>'+fmtMoney(o.total)+'</td><td>'+statusBadge(o.status)+'</td><td class="sm">'+fmtDT(o.created_at)+'</td></tr>';
+      }).join('') : '<tr><td colspan="5" style="text-align:center;color:rgba(196,181,253,.3);padding:20px">Aucune commande</td></tr>')+
+      '</tbody></table></div></div>';
+  });
+}
+
+/* ════════════════════════════════════════
+   CLIENTS
+════════════════════════════════════════ */
+function loadClients() {
+  document.getElementById('hdr-act').innerHTML = '<button class="btn btn-p btn-sm" onclick="openClientModal()">+ Nouvelle entreprise</button>';
+  var cnt = document.getElementById('admin-cnt');
+  cnt.innerHTML = '<div class="spin-wrap"><div class="spin"></div></div>';
+  sbGet('clients', 'select=*&order=created_at.asc').then(function(data) {
+    var clients = data || [];
+    cnt.innerHTML = '<div class="card"><div style="overflow-x:auto"><table class="tbl">'+
+      '<thead><tr><th>#</th><th>Identifiant</th><th>Entreprise</th><th>Créé le</th><th>Actions</th></tr></thead><tbody>'+
+      (clients.length ? clients.map(function(c,i) {
+        return '<tr>'+
+          '<td class="sm">'+(i+1)+'</td>'+
+          '<td><strong>'+esc(c.username)+'</strong></td>'+
+          '<td>'+esc(c.company)+'</td>'+
+          '<td class="sm">'+fmtDate(c.created_at)+'</td>'+
+          '<td><div class="acts">'+
+            '<button class="btn btn-s btn-sm" data-id="'+c.id+'" onclick="openClientModal(this.dataset.id)">✏️ Modifier</button>'+
+            '<button class="btn btn-d btn-sm" data-id="'+c.id+'" onclick="delClient(this.dataset.id)">🗑️</button>'+
+          '</div></td></tr>';
+      }).join('') : '<tr><td colspan="5" style="text-align:center;color:rgba(196,181,253,.3);padding:20px">Aucune entreprise</td></tr>')+
+      '</tbody></table></div></div>';
+  });
+}
+
+function openClientModal(id) {
+  if(id) {
+    sbGet('clients', 'id=eq.'+id+'&select=*').then(function(data) {
+      var c = data && data[0] ? data[0] : {};
+      showClientForm(c);
+    });
+  } else { showClientForm({}); }
+}
+
+function showClientForm(c) {
+  openModal(c.id ? '✏️ Modifier entreprise' : '+ Nouvelle entreprise',
+    '<div class="fg"><label>Identifiant *</label><input type="text" id="c-user" value="'+esc(c.username||'')+'" placeholder="nom_entreprise"></div>'+
+    '<div class="fg"><label>Nom de l\'entreprise *</label><input type="text" id="c-co" value="'+esc(c.company||'')+'" placeholder="Grove Corp"></div>'+
+    '<div class="fg"><label>Mot de passe '+(c.id?'(vide = inchangé)':'*')+'</label><input type="password" id="c-pass" placeholder="••••••••"></div>',
+    '<button class="btn btn-p" onclick="saveClient(\''+esc(c.id||'')+'\')">💾 Enregistrer</button><button class="btn btn-s" onclick="closeModal()">Annuler</button>'
+  );
+}
+
+function saveClient(id) {
+  var u  = document.getElementById('c-user').value.trim();
+  var co = document.getElementById('c-co').value.trim();
+  var p  = document.getElementById('c-pass').value;
+  if(!u || !co) { toast('Identifiant et nom requis','err'); return; }
+  if(!id && !p) { toast('Mot de passe requis','err'); return; }
+  var body = { username:u, company:co };
+  if(p) body.password = p;
+  var op = id ? sbPatch('clients', 'id=eq.'+id, body) : sbPost('clients', body);
+  op.then(function() { toast(id?'Entreprise modifiée':'Entreprise créée','ok'); closeModal(); loadClients(); })
+    .catch(function() { toast('Erreur','err'); });
+}
+
+function delClient(id) {
+  if(!confirm('Supprimer cette entreprise ? Ses commandes et catalogue seront aussi supprimés.')) return;
+  Promise.all([
+    sbDelete('catalog', 'client_id=eq.'+id),
+    sbDelete('orders', 'client_id=eq.'+id)
+  ]).then(function() {
+    return sbDelete('clients', 'id=eq.'+id);
+  }).then(function() { toast('Entreprise supprimée','ok'); loadClients(); })
+    .catch(function() { toast('Erreur','err'); });
+}
+
+/* ════════════════════════════════════════
+   PRODUCTS
+════════════════════════════════════════ */
+function loadProducts() {
+  document.getElementById('hdr-act').innerHTML = '<button class="btn btn-p btn-sm" onclick="openProductModal()">+ Nouvel article</button>';
+  var cnt = document.getElementById('admin-cnt');
+  cnt.innerHTML = '<div class="spin-wrap"><div class="spin"></div></div>';
+  sbGet('products', 'select=*&order=created_at.asc').then(function(data) {
+    var prods = data || [];
+    cnt.innerHTML = '<div class="card"><div style="overflow-x:auto"><table class="tbl">'+
+      '<thead><tr><th>Nom</th><th>Catégorie</th><th>Prix base</th><th>Statut</th><th>Actions</th></tr></thead><tbody>'+
+      (prods.length ? prods.map(function(p) {
+        return '<tr>'+
+          '<td><strong>'+esc(p.name)+'</strong>'+(p.description?'<br><span class="sm">'+esc(p.description.substring(0,40))+'</span>':'')+'</td>'+
+          '<td class="sm">'+esc(p.category||'—')+'</td>'+
+          '<td>'+fmtMoney(p.base_price)+'</td>'+
+          '<td><span class="bdg '+(p.active?'ba':'bi')+'">'+(p.active?'✅ Actif':'⛔ Inactif')+'</span></td>'+
+          '<td><div class="acts">'+
+            '<button class="btn btn-s btn-sm" data-id="'+p.id+'" onclick="openProductModal(this.dataset.id)">✏️</button>'+
+            '<button class="btn btn-d btn-sm" data-id="'+p.id+'" onclick="delProduct(this.dataset.id)">🗑️</button>'+
+          '</div></td></tr>';
+      }).join('') : '<tr><td colspan="5" style="text-align:center;color:rgba(196,181,253,.3);padding:20px">Aucun article</td></tr>')+
+      '</tbody></table></div></div>';
+  });
+}
+
+function openProductModal(id) {
+  if(id) {
+    sbGet('products', 'id=eq.'+id+'&select=*').then(function(data) {
+      showProductForm(data && data[0] ? data[0] : {});
+    });
+  } else { showProductForm({}); }
+}
+
+function showProductForm(p) {
+  openModal(p.id ? '✏️ Modifier article' : '+ Nouvel article',
+    '<div class="frow">'+
+      '<div class="fg"><label>Nom *</label><input type="text" id="p-name" value="'+esc(p.name||'')+'" placeholder="Pistolet .50"></div>'+
+      '<div class="fg"><label>Catégorie</label><input type="text" id="p-cat" value="'+esc(p.category||'')+'" placeholder="Armement"></div>'+
+    '</div>'+
+    '<div class="fg"><label>Description</label><textarea id="p-desc" rows="2" style="resize:none">'+esc(p.description||'')+'</textarea></div>'+
+    '<div class="fg"><label>URL Image (optionnel)</label><input type="url" id="p-img" value="'+esc(p.image||'')+'" placeholder="https://..."></div>'+
+    '<div class="frow">'+
+      '<div class="fg"><label>Prix de base (€) *</label><input type="number" id="p-price" step="0.01" min="0" value="'+(p.base_price||'')+'"></div>'+
+      '<div class="fg"><label>Actif</label><label class="tog" style="margin-top:8px"><input type="checkbox" id="p-active"'+(p.active===false?'':' checked')+'><span class="tog-sl"></span></label></div>'+
+    '</div>',
+    '<button class="btn btn-p" onclick="saveProduct(\''+esc(p.id||'')+'\')">💾 Enregistrer</button><button class="btn btn-s" onclick="closeModal()">Annuler</button>',
+    true
+  );
+}
+
+function saveProduct(id) {
+  var name  = document.getElementById('p-name').value.trim();
+  var cat   = document.getElementById('p-cat').value.trim();
+  var desc  = document.getElementById('p-desc').value.trim();
+  var img   = document.getElementById('p-img').value.trim();
+  var price = parseFloat(document.getElementById('p-price').value);
+  var active= document.getElementById('p-active').checked;
+  if(!name) { toast('Nom requis','err'); return; }
+  if(isNaN(price) || price < 0) { toast('Prix invalide','err'); return; }
+  var body = { name:name, category:cat, description:desc, image:img, base_price:price, active:active };
+  var op = id ? sbPatch('products','id=eq.'+id,body) : sbPost('products',body);
+  op.then(function() { toast(id?'Article modifié':'Article créé','ok'); closeModal(); loadProducts(); })
+    .catch(function() { toast('Erreur','err'); });
+}
+
+function delProduct(id) {
+  if(!confirm('Supprimer cet article ?')) return;
+  sbDelete('catalog','product_id=eq.'+id).then(function() {
+    return sbDelete('products','id=eq.'+id);
+  }).then(function() { toast('Article supprimé','ok'); loadProducts(); });
+}
+
+/* ════════════════════════════════════════
+   CATALOGUE (prix par entreprise)
+════════════════════════════════════════ */
+function loadCatalogSection() {
+  var cnt = document.getElementById('admin-cnt');
+  cnt.innerHTML = '<div class="spin-wrap"><div class="spin"></div></div>';
+  sbGet('clients','select=id,username,company&order=company.asc').then(function(clients) {
+    if(!clients || !clients.length) {
+      cnt.innerHTML = '<div class="card"><p style="color:rgba(196,181,253,.4);font-size:13px">Créez d\'abord des entreprises.</p></div>'; return;
+    }
+    cnt.innerHTML = '<div class="card" style="margin-bottom:14px">'+
+      '<div class="fg" style="max-width:320px"><label>Sélectionner une entreprise</label>'+
+      '<select id="cat-client-sel" onchange="loadCatalogForClient(this.value)">'+
+        '<option value="">— choisir —</option>'+
+        clients.map(function(c){ return '<option value="'+c.id+'">'+esc(c.company||c.username)+'</option>'; }).join('')+
+      '</select></div></div>'+
+      '<div id="cat-content"></div>';
+  });
+}
+
+function loadCatalogForClient(clientId) {
+  if(!clientId) return;
+  var cc = document.getElementById('cat-content');
+  cc.innerHTML = '<div class="spin-wrap"><div class="spin"></div></div>';
+  Promise.all([
+    sbGet('products','active=eq.true&select=*&order=category.asc,name.asc'),
+    sbGet('catalog','client_id=eq.'+clientId+'&select=*')
+  ]).then(function(r) {
+    var prods = r[0] || [];
+    var catItems = r[1] || [];
+    var enabledMap = {}; var priceMap = {};
+    catItems.forEach(function(i) { enabledMap[i.product_id] = i; priceMap[i.product_id] = i.custom_price; });
+    if(!prods.length) { cc.innerHTML = '<div class="card"><p style="color:rgba(196,181,253,.4)">Aucun article actif.</p></div>'; return; }
+    cc.innerHTML = '<div class="card">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">'+
+        '<div style="font-size:13px;font-weight:600;color:#f1f5f9">Configurez les articles disponibles et leurs prix</div>'+
+        '<button class="btn btn-g btn-sm" onclick="saveCatalog(\''+clientId+'\')">💾 Enregistrer</button>'+
+      '</div>'+
+      '<div class="cat-grid" id="cat-grid">'+
+        prods.map(function(p) {
+          var enabled = !!enabledMap[p.id];
+          var customPrice = priceMap[p.id] != null ? priceMap[p.id] : '';
+          return '<div class="cat-item'+(enabled?' on':'')+'" id="cit-'+p.id+'">'+
+            '<div class="cat-item-hdr">'+
+              '<label class="tog"><input type="checkbox" class="cat-chk" data-id="'+p.id+'"'+(enabled?' checked':'')+' onchange="toggleCatItem(this)"><span class="tog-sl"></span></label>'+
+              '<span class="cat-name">'+esc(p.name)+'</span>'+
+            '</div>'+
+            '<div class="cat-price-row">'+
+              '<span class="cat-base">Base: '+fmtMoney(p.base_price)+'</span>'+
+              '<input type="number" class="cat-price-inp" data-id="'+p.id+'" step="0.01" min="0" value="'+esc(String(customPrice))+'" placeholder="Prix perso"'+(enabled?'':' disabled')+'>'+
+            '</div>'+
+          '</div>';
+        }).join('')+
+      '</div></div>';
+  });
+}
+
+function toggleCatItem(chk) {
+  var id = chk.dataset.id;
+  var item = document.getElementById('cit-'+id);
+  var inp  = item.querySelector('.cat-price-inp');
+  item.classList.toggle('on', chk.checked);
+  inp.disabled = !chk.checked;
+}
+
+function saveCatalog(clientId) {
+  var prods = document.querySelectorAll('.cat-chk');
+  var ops = [];
+  prods.forEach(function(chk) {
+    var pid = chk.dataset.id;
+    var inp = document.querySelector('.cat-price-inp[data-id="'+pid+'"]');
+    var cp  = inp && inp.value !== '' ? parseFloat(inp.value) : null;
+    if(chk.checked) {
+      ops.push(
+        sbDelete('catalog','client_id=eq.'+clientId+'&product_id=eq.'+pid).then(function() {
+          return sbPost('catalog',{client_id:clientId,product_id:pid,custom_price:cp,enabled:true});
+        })
+      );
+    } else {
+      ops.push(sbDelete('catalog','client_id=eq.'+clientId+'&product_id=eq.'+pid));
+    }
+  });
+  Promise.all(ops).then(function() { toast('Catalogue enregistré ✅','ok'); })
+    .catch(function() { toast('Erreur sauvegarde','err'); });
+}
+
+/* ════════════════════════════════════════
+   ORDERS (admin)
+════════════════════════════════════════ */
+var ordFilter = '';
+function loadOrders() {
+  var cnt = document.getElementById('admin-cnt');
+  cnt.innerHTML = '<div class="spin-wrap"><div class="spin"></div></div>';
+  var q = 'select=*,clients(company)&order=created_at.desc';
+  if(ordFilter) q += '&status=eq.'+ordFilter;
+  sbGet('orders', q).then(function(data) {
+    var orders = data || [];
+    cnt.innerHTML =
+      '<div class="card" style="margin-bottom:12px">'+
+        '<select onchange="ordFilter=this.value;loadOrders()" style="background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.2);border-radius:7px;padding:7px 12px;color:#f1f5f9;font-size:12.5px;font-family:inherit;outline:none">'+
+          '<option value="" '+(ordFilter===''?'selected':'')+'>Tous les statuts</option>'+
+          ['pending','preparing','delivered','cancelled'].map(function(s){
+            return '<option value="'+s+'"'+(ordFilter===s?' selected':'')+'>'+{pending:'⏳ En attente',preparing:'🔧 En préparation',delivered:'✅ Livrée',cancelled:'❌ Annulée'}[s]+'</option>';
+          }).join('')+
+        '</select>'+
+        '<span style="margin-left:10px;font-size:11px;color:rgba(196,181,253,.4)"><span class="realtime-dot"></span>Mise à jour automatique</span>'+
+      '</div>'+
+      '<div class="card"><div style="overflow-x:auto"><table class="tbl">'+
+      '<thead><tr><th>#</th><th>Entreprise</th><th>Contact</th><th>Total</th><th>Statut</th><th>Date</th><th>Actions</th></tr></thead><tbody>'+
+      (orders.length ? orders.map(function(o,i) {
+        var co = o.clients ? o.clients.company : (o.company||'—');
+        return '<tr>'+
+          '<td class="sm">'+(i+1)+'</td>'+
+          '<td><strong>'+esc(co)+'</strong></td>'+
+          '<td class="sm">'+esc(o.first_name+' '+o.last_name)+'</td>'+
+          '<td>'+fmtMoney(o.total)+'</td>'+
+          '<td><select class="status-sel" data-id="'+o.id+'" onchange="changeStatus(this)">'+
+            ['pending','preparing','delivered','cancelled'].map(function(s){
+              return '<option value="'+s+'"'+(o.status===s?' selected':'')+'>'+{pending:'⏳ Attente',preparing:'🔧 Prép.',delivered:'✅ Livrée',cancelled:'❌ Annulée'}[s]+'</option>';
+            }).join('')+
+          '</select></td>'+
+          '<td class="sm">'+fmtDT(o.created_at)+'</td>'+
+          '<td><div class="acts">'+
+            '<button class="btn btn-s btn-sm" data-id="'+o.id+'" onclick="viewOrder(this.dataset.id)">👁️</button>'+
+            '<button class="btn btn-d btn-sm" data-id="'+o.id+'" onclick="delOrder(this.dataset.id)">🗑️</button>'+
+          '</div></td></tr>';
+      }).join('') : '<tr><td colspan="7" style="text-align:center;color:rgba(196,181,253,.3);padding:20px">Aucune commande</td></tr>')+
+      '</tbody></table></div></div>';
+  });
+}
+
+function changeStatus(sel) {
+  var id = sel.dataset.id; var status = sel.value;
+  sbPatch('orders','id=eq.'+id,{status:status}).then(function() {
+    toast('Statut mis à jour','ok');
+    updatePendingBadge();
+    sendDiscordStatus(id, status);
+  });
+}
+
+function sendDiscordStatus(orderId, status) {
+  sbGet('orders','id=eq.'+orderId+'&select=*,clients(company)').then(function(data) {
+    if(!data || !data[0]) return;
+    var o = data[0];
+    var co = o.clients ? o.clients.company : o.company;
+    var labels = {pending:'⏳ En attente',preparing:'🔧 En préparation',delivered:'✅ Livrée',cancelled:'❌ Annulée'};
+    var colors = {pending:16753920,preparing:5793266,delivered:3977216,cancelled:15158332};
+    sendDiscord({embeds:[{
+      title: labels[status]+' — '+co,
+      color: colors[status]||7274479,
+      description: 'La commande de **'+co+'** ('+fmtMoney(o.total)+') est maintenant : **'+labels[status]+'**',
+      footer:{text:'LTD Grove Street • '+nowStr()}
+    }]});
+  });
+}
+
+function viewOrder(id) {
+  sbGet('orders','id=eq.'+id+'&select=*').then(function(data) {
+    if(!data || !data[0]) return;
+    var o = data[0];
+    var items = o.items || [];
+    openModal('📦 Commande — '+esc(o.company),
+      '<div class="frow" style="margin-bottom:10px">'+
+        '<div><div style="font-size:9px;color:rgba(196,181,253,.4);margin-bottom:3px">ENTREPRISE</div><div style="font-size:13px;font-weight:600">'+esc(o.company)+'</div></div>'+
+        '<div><div style="font-size:9px;color:rgba(196,181,253,.4);margin-bottom:3px">STATUT</div>'+statusBadge(o.status)+'</div>'+
+      '</div>'+
+      '<div class="frow" style="margin-bottom:10px">'+
+        '<div><div style="font-size:9px;color:rgba(196,181,253,.4);margin-bottom:3px">CONTACT</div><div>'+esc(o.first_name+' '+o.last_name)+'</div></div>'+
+        '<div><div style="font-size:9px;color:rgba(196,181,253,.4);margin-bottom:3px">TÉLÉPHONE</div><div>'+esc(o.phone||'—')+'</div></div>'+
+      '</div>'+
+      (o.delivery_date?'<div style="margin-bottom:10px"><div style="font-size:9px;color:rgba(196,181,253,.4);margin-bottom:3px">DATE LIVRAISON</div><div>'+fmtDate(o.delivery_date)+'</div></div>':'')+
+      (o.note?'<div style="margin-bottom:12px"><div style="font-size:9px;color:rgba(196,181,253,.4);margin-bottom:3px">NOTE</div><div style="color:rgba(196,181,253,.6);font-style:italic">'+esc(o.note)+'</div></div>':'')+
+      '<hr style="border:none;border-top:1px solid rgba(139,92,246,.1);margin-bottom:12px">'+
+      '<table class="tbl"><thead><tr><th>Article</th><th>Qté</th><th>Prix</th><th>Sous-total</th></tr></thead><tbody>'+
+      items.map(function(it){ return '<tr><td>'+esc(it.name)+'</td><td>'+it.qty+'</td><td>'+fmtMoney(it.price)+'</td><td>'+fmtMoney(it.qty*it.price)+'</td></tr>'; }).join('')+
+      '<tr style="font-weight:700"><td colspan="3">Total</td><td>'+fmtMoney(o.total)+'</td></tr>'+
+      '</tbody></table>'
+    );
+  });
+}
+
+function delOrder(id) {
+  if(!confirm('Supprimer cette commande ?')) return;
+  sbDelete('orders','id=eq.'+id).then(function() {
+    toast('Commande supprimée','ok'); loadOrders(); updatePendingBadge();
+  });
+}
+
+/* ════════════════════════════════════════
+   ANNOUNCEMENTS (admin)
+════════════════════════════════════════ */
+function loadAnnAdmin() {
+  document.getElementById('hdr-act').innerHTML = '<button class="btn btn-p btn-sm" onclick="openAnnModal()">+ Nouvelle annonce</button>';
+  var cnt = document.getElementById('admin-cnt');
+  cnt.innerHTML = '<div class="spin-wrap"><div class="spin"></div></div>';
+  sbGet('announcements','select=*&order=created_at.desc').then(function(data) {
+    var anns = data || [];
+    cnt.innerHTML = '<div class="card"><div style="overflow-x:auto"><table class="tbl">'+
+      '<thead><tr><th>Message</th><th>Couleur</th><th>Statut</th><th>Actions</th></tr></thead><tbody>'+
+      (anns.length ? anns.map(function(a) {
+        return '<tr>'+
+          '<td>'+esc(a.message.substring(0,70))+'</td>'+
+          '<td>'+esc(a.color)+'</td>'+
+          '<td><span class="bdg '+(a.active?'ba':'bi')+'">'+(a.active?'✅ Active':'⛔ Inactive')+'</span></td>'+
+          '<td><div class="acts">'+
+            '<button class="btn btn-s btn-sm" data-id="'+a.id+'" data-active="'+(a.active?'1':'0')+'" onclick="toggleAnn(this.dataset.id,this.dataset.active)">'+(a.active?'⛔ Désactiver':'✅ Activer')+'</button>'+
+            '<button class="btn btn-d btn-sm" data-id="'+a.id+'" onclick="delAnn(this.dataset.id)">🗑️</button>'+
+          '</div></td></tr>';
+      }).join('') : '<tr><td colspan="4" style="text-align:center;color:rgba(196,181,253,.3);padding:20px">Aucune annonce</td></tr>')+
+      '</tbody></table></div></div>';
+  });
+}
+
+function openAnnModal() {
+  openModal('+ Nouvelle annonce',
+    '<div class="fg"><label>Message *</label><textarea id="ann-msg" rows="3" style="resize:none" placeholder="Message de l\'annonce…"></textarea></div>'+
+    '<div class="fg"><label>Couleur</label><div class="cpick" id="ann-cpick">'+
+      ['purple','cyan','gold','red'].map(function(c){ return '<span class="copt'+(c==='purple'?' sel':'')+'" data-c="'+c+'" onclick="selColor(this)"></span>'; }).join('')+
+    '</div><input type="hidden" id="ann-color" value="purple"></div>'+
+    '<div class="fg" style="flex-direction:row;align-items:center;justify-content:space-between;margin-bottom:0"><label>Active immédiatement</label><label class="tog"><input type="checkbox" id="ann-active" checked><span class="tog-sl"></span></label></div>',
+    '<button class="btn btn-p" onclick="saveAnn()">💾 Publier</button><button class="btn btn-s" onclick="closeModal()">Annuler</button>'
+  );
+}
+
+function selColor(el) {
+  document.querySelectorAll('.copt').forEach(function(e){ e.classList.remove('sel'); });
+  el.classList.add('sel');
+  document.getElementById('ann-color').value = el.dataset.c;
+}
+
+function saveAnn() {
+  var msg    = document.getElementById('ann-msg').value.trim();
+  var color  = document.getElementById('ann-color').value;
+  var active = document.getElementById('ann-active').checked;
+  if(!msg) { toast('Message requis','err'); return; }
+  sbPost('announcements',{message:msg,color:color,active:active}).then(function() {
+    toast('Annonce publiée','ok'); closeModal(); loadAnnAdmin();
+  });
+}
+
+function toggleAnn(id, isActive) {
+  sbPatch('announcements','id=eq.'+id,{active:isActive==='1'?false:true}).then(function() {
+    toast('Statut modifié','ok'); loadAnnAdmin();
+  });
+}
+
+function delAnn(id) {
+  if(!confirm('Supprimer cette annonce ?')) return;
+  sbDelete('announcements','id=eq.'+id).then(function() { toast('Annonce supprimée','ok'); loadAnnAdmin(); });
+}
+
+/* ════════════════════════════════════════
+   CONTACTS (admin)
+════════════════════════════════════════ */
+function loadContacts() {
+  document.getElementById('hdr-act').innerHTML = '<button class="btn btn-p btn-sm" onclick="openContactModal()">+ Ajouter responsable</button>';
+  var cnt = document.getElementById('admin-cnt');
+  cnt.innerHTML = '<div class="spin-wrap"><div class="spin"></div></div>';
+  sbGet('contacts','select=*&order=created_at.asc').then(function(data) {
+    var contacts = data || [];
+    cnt.innerHTML = '<div class="card"><div class="card-title">Responsables LTD</div>'+
+      '<div class="contact-grid">'+
+      (contacts.length ? contacts.map(function(c) {
+        var init = ((c.first_name||'?')[0]+(c.last_name||'')[0]).toUpperCase();
+        return '<div class="contact-card">'+
+          '<div class="contact-av">'+init+'</div>'+
+          '<div class="contact-info" style="flex:1">'+
+            '<strong>'+esc(c.first_name+' '+c.last_name)+'</strong>'+
+            (c.role?'<p>'+esc(c.role)+'</p>':'')+
+            (c.phone?'<p>📞 '+esc(c.phone)+'</p>':'')+
+          '</div>'+
+          '<button class="btn btn-d btn-sm" data-id="'+c.id+'" onclick="delContact(this.dataset.id)" style="flex-shrink:0">🗑️</button>'+
+        '</div>';
+      }).join('') : '<p style="color:rgba(196,181,253,.3);font-size:12px;font-style:italic">Aucun responsable renseigné</p>')+
+      '</div></div>';
+  });
+}
+
+function openContactModal() {
+  openModal('+ Ajouter un responsable',
+    '<div class="frow"><div class="fg"><label>Prénom *</label><input type="text" id="ct-first" placeholder="Jean"></div><div class="fg"><label>Nom *</label><input type="text" id="ct-last" placeholder="Dupont"></div></div>'+
+    '<div class="fg"><label>Rôle</label><input type="text" id="ct-role" placeholder="Chef de zone, Boss..."></div>'+
+    '<div class="fg"><label>Téléphone</label><input type="tel" id="ct-phone" placeholder="+33 6 00 00 00 00"></div>',
+    '<button class="btn btn-p" onclick="saveContact()">💾 Ajouter</button><button class="btn btn-s" onclick="closeModal()">Annuler</button>'
+  );
+}
+
+function saveContact() {
+  var first = document.getElementById('ct-first').value.trim();
+  var last  = document.getElementById('ct-last').value.trim();
+  if(!first || !last) { toast('Prénom et nom requis','err'); return; }
+  sbPost('contacts',{first_name:first,last_name:last,role:document.getElementById('ct-role').value.trim(),phone:document.getElementById('ct-phone').value.trim()}).then(function() {
+    toast('Contact ajouté','ok'); closeModal(); loadContacts();
+  });
+}
+
+function delContact(id) {
+  if(!confirm('Supprimer ce contact ?')) return;
+  sbDelete('contacts','id=eq.'+id).then(function() { toast('Contact supprimé','ok'); loadContacts(); });
+}
+
+/* ════════════════════════════════════════
+   SETTINGS
+════════════════════════════════════════ */
+function loadSettings() {
+  var cnt = document.getElementById('admin-cnt');
+  cnt.innerHTML = '<div class="card">'+
+    '<div class="card-title">Compte administrateur</div>'+
+    '<div class="fg"><label>Identifiant admin</label><input type="text" id="s-user" value="'+esc(ADMIN.username)+'"></div>'+
+    '<div class="fg"><label>Nouveau mot de passe (vide = inchangé)</label><input type="password" id="s-pass" placeholder="••••••••"></div>'+
+    '<button class="btn btn-p" onclick="saveSettings()">💾 Enregistrer</button>'+
+    '</div>';
+}
+
+function saveSettings() {
+  var u = document.getElementById('s-user').value.trim();
+  var p = document.getElementById('s-pass').value;
+  if(!u) { toast('Identifiant requis','err'); return; }
+  ADMIN.username = u;
+  if(p) { if(p.length < 4) { toast('Mot de passe trop court','err'); return; } ADMIN.password = p; }
+  toast('Paramètres enregistrés','ok');
+}
+
+/* ════════════════════════════════════════
+   CLIENT TABS
+════════════════════════════════════════ */
+var activeCat = '';
+var searchQ   = '';
+
+function goTab(btn) {
+  document.querySelectorAll('.cl-tab').forEach(function(b){ b.classList.toggle('on', b===btn); });
+  var tab = btn.dataset.tab;
+  document.getElementById('tab-order').classList.toggle('hidden', tab!=='order');
+  document.getElementById('tab-history').classList.toggle('hidden', tab!=='history');
+  document.getElementById('tab-contacts').classList.toggle('hidden', tab!=='contacts');
+  if(tab==='order'    && !document.getElementById('prod-grid')) renderCatalogLayout();
+  if(tab==='history')  renderHistory();
+  if(tab==='contacts') renderClientContacts();
+}
+
+/* ════════════════════════════════════════
+   ANNOUNCEMENTS (client)
+════════════════════════════════════════ */
+function loadAnnouncements() {
+  sbGet('announcements','active=eq.true&select=*&order=created_at.desc').then(function(data) {
+    var bar = document.getElementById('ann-bar');
+    if(!bar) return;
+    var anns = data || [];
+    bar.innerHTML = anns.map(function(a){ return '<div class="ann-'+esc(a.color)+'">'+esc(a.message)+'</div>'; }).join('');
+  });
+}
+
+/* ════════════════════════════════════════
+   CATALOG (client)
+════════════════════════════════════════ */
+function renderCatalogLayout() {
+  var el = document.getElementById('tab-order');
+  el.innerHTML =
+    '<div class="cart-layout">'+
+      '<div>'+
+        '<div class="cat-filters">'+
+          '<input class="search-box" id="cat-search" placeholder="🔍 Rechercher…" oninput="searchQ=this.value;renderProducts()">'+
+          '<div class="pills" id="cat-pills"></div>'+
+        '</div>'+
+        '<div id="prod-grid"></div>'+
+      '</div>'+
+      '<div class="cart-box">'+
+        '<div class="cart-card">'+
+          '<div class="cart-hdr2"><h3>Panier</h3><span class="cart-cnt" id="cart-count">0</span></div>'+
+          '<div class="cart-list" id="cart-list"><div class="cart-empty">Votre panier est vide</div></div>'+
+          '<div class="cart-tot-bar"><span class="cart-tot-lbl">Total</span><span class="cart-tot-val" id="cart-total">0,00 €</span></div>'+
+          '<div class="cart-form">'+
+            '<div class="cart-form-ttl">Informations livraison</div>'+
+            '<div class="frow" style="gap:8px">'+
+              '<div class="fg" style="margin-bottom:8px"><label>Prénom *</label><input type="text" id="dlv-first" placeholder="Jean"></div>'+
+              '<div class="fg" style="margin-bottom:8px"><label>Nom *</label><input type="text" id="dlv-last" placeholder="Dupont"></div>'+
+            '</div>'+
+            '<div class="fg" style="margin-bottom:8px"><label>Téléphone</label><input type="tel" id="dlv-phone" placeholder="+33 6 …"></div>'+
+            '<div class="fg" style="margin-bottom:8px"><label>Date souhaitée</label><input type="date" id="dlv-date"></div>'+
+            '<div class="fg" style="margin-bottom:12px"><label>Note</label><textarea id="dlv-note" rows="2" style="resize:none" placeholder="Instructions…"></textarea></div>'+
+            '<button class="btn btn-g btn-full" id="submit-btn" onclick="submitOrder()" disabled>✅ Confirmer la commande</button>'+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  loadClientCatalog();
+}
+
+var clientCatalog = [];
+
+function loadClientCatalog() {
+  var clientId = currentUser && currentUser.data ? currentUser.data.id : null;
+  if(!clientId) return;
+  document.getElementById('prod-grid').innerHTML = '<div class="spin-wrap"><div class="spin"></div></div>';
+  sbGet('catalog','client_id=eq.'+clientId+'&enabled=eq.true&select=custom_price,products(id,name,category,description,image,base_price,active)').then(function(data) {
+    clientCatalog = (data||[]).filter(function(i){ return i.products && i.products.active; }).map(function(i) {
+      return {
+        id: i.products.id,
+        name: i.products.name,
+        category: i.products.category,
+        description: i.products.description,
+        image: i.products.image,
+        price: i.custom_price != null ? i.custom_price : i.products.base_price
+      };
+    });
+    var cats = [];
+    clientCatalog.forEach(function(p){ if(p.category && cats.indexOf(p.category)===-1) cats.push(p.category); });
+    cats.sort();
+    var pills = document.getElementById('cat-pills');
+    if(pills) {
+      pills.innerHTML = '<button class="pill on" onclick="activeCat=\'\';document.querySelectorAll(\'.pill\').forEach(function(x){x.classList.remove(\'on\')});this.classList.add(\'on\');renderProducts()">Tout</button>'+
+        cats.map(function(c){ return '<button class="pill" onclick="activeCat=\''+esc(c)+'\';document.querySelectorAll(\'.pill\').forEach(function(x){x.classList.remove(\'on\')});this.classList.add(\'on\');renderProducts()">'+esc(c)+'</button>'; }).join('');
+    }
+    renderProducts();
+  });
+}
+
+function renderProducts() {
+  var filtered = clientCatalog.filter(function(p){
+    if(activeCat && p.category !== activeCat) return false;
+    if(searchQ){ var q=searchQ.toLowerCase(); if(!p.name.toLowerCase().includes(q)&&!(p.description||'').toLowerCase().includes(q)) return false; }
+    return true;
+  });
+  var grid = document.getElementById('prod-grid');
+  if(!grid) return;
+  if(!filtered.length){ grid.innerHTML='<div style="color:rgba(196,181,253,.3);font-size:13px;padding:20px;text-align:center">Aucun article trouvé</div>'; return; }
+  grid.innerHTML = '<div class="prod-grid">'+filtered.map(function(p){
+    var inCart = cart[p.id]; var qty = inCart ? inCart.qty : 0;
+    return '<div class="prod-card">'+
+      (p.image?'<img class="prod-img" src="'+esc(p.image)+'" onerror="this.outerHTML=\'<div class=\\\'prod-img-ph\\\'>📦</div>\'">':'<div class="prod-img-ph">📦</div>')+
+      '<div class="prod-body">'+
+        '<div class="prod-cat">'+esc(p.category||'')+'</div>'+
+        '<div class="prod-name">'+esc(p.name)+'</div>'+
+        (p.description?'<div class="prod-desc">'+esc(p.description)+'</div>':'')+
+        '<div class="prod-foot">'+
+          '<span class="prod-price">'+fmtMoney(p.price)+'</span>'+
+          (qty>0
+            ? '<div class="qty-ctrl"><button class="qbtn" data-id="'+p.id+'" onclick="updateQty(this.dataset.id,-1)">−</button><span class="qty-val">'+qty+'</span><button class="qbtn" data-id="'+p.id+'" onclick="updateQty(this.dataset.id,1)">+</button></div>'
+            : '<button class="prod-add" data-id="'+p.id+'" onclick="addToCart(this.dataset.id)">+</button>')+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  }).join('') + '</div>';
+}
+
+function addToCart(pid) {
+  var p = null;
+  for(var i=0;i<clientCatalog.length;i++){if(clientCatalog[i].id===pid){p=clientCatalog[i];break;}}
+  if(!p) return;
+  if(cart[pid]){ cart[pid].qty++; } else { cart[pid]={id:pid,name:p.name,price:p.price,qty:1}; }
+  renderProducts(); renderCart();
+}
+function updateQty(pid,d) {
+  if(!cart[pid]) return;
+  cart[pid].qty += d;
+  if(cart[pid].qty <= 0) delete cart[pid];
+  renderProducts(); renderCart();
+}
+function renderCart() {
+  var items = Object.values(cart);
+  var total = items.reduce(function(s,i){return s+i.qty*i.price;},0);
+  var qty   = items.reduce(function(s,i){return s+i.qty;},0);
+  var cc = document.getElementById('cart-count'); if(cc) cc.textContent = qty;
+  var ct = document.getElementById('cart-total'); if(ct) ct.textContent = fmtMoney(total);
+  var cl = document.getElementById('cart-list');
+  if(cl){
+    if(!items.length){ cl.innerHTML='<div class="cart-empty">Votre panier est vide</div>'; }
+    else { cl.innerHTML = items.map(function(it){
+      return '<div class="cart-li">'+
+        '<div class="cart-li-top"><span class="cart-li-name">'+esc(it.name)+'</span><span class="cart-li-px">'+fmtMoney(it.price)+' × '+it.qty+'</span></div>'+
+        '<div class="cart-li-bot">'+
+          '<button class="qbtn" data-id="'+it.id+'" onclick="updateQty(this.dataset.id,-1)">−</button>'+
+          '<span class="qty-val">'+it.qty+'</span>'+
+          '<button class="qbtn" data-id="'+it.id+'" onclick="updateQty(this.dataset.id,1)">+</button>'+
+          '<span class="cart-li-sub">'+fmtMoney(it.qty*it.price)+'</span>'+
+        '</div>'+
+      '</div>';
+    }).join('');}
+  }
+  var sb = document.getElementById('submit-btn');
+  if(sb) sb.disabled = items.length === 0;
+}
+
+/* ════════════════════════════════════════
+   SUBMIT ORDER
+════════════════════════════════════════ */
+function submitOrder() {
+  var items = Object.values(cart);
+  if(!items.length){ toast('Panier vide','err'); return; }
+  var first = document.getElementById('dlv-first').value.trim();
+  var last  = document.getElementById('dlv-last').value.trim();
+  if(!first||!last){ toast('Prénom et nom obligatoires','err'); return; }
+  var total = items.reduce(function(s,i){return s+i.qty*i.price;},0);
+  var phone = document.getElementById('dlv-phone').value.trim();
+  var date  = document.getElementById('dlv-date').value || null;
+  var note  = document.getElementById('dlv-note').value.trim();
+  var sb = document.getElementById('submit-btn');
+  sb.disabled = true; sb.textContent = '⏳ Envoi…';
+  var order = {
+    client_id:  currentUser.data.id,
+    company:    currentUser.data.company,
+    first_name: first,
+    last_name:  last,
+    phone:      phone,
+    delivery_date: date,
+    note:       note,
+    items:      items.map(function(i){return {id:i.id,name:i.name,price:i.price,qty:i.qty};}),
+    total:      total,
+    status:     'pending'
+  };
+  sbPost('orders', order).then(function(data) {
+    sb.disabled = false; sb.textContent = '✅ Confirmer la commande';
+    toast('🎉 Commande envoyée avec succès !','ok');
+    cart = {};
+    renderProducts(); renderCart();
+    ['dlv-first','dlv-last','dlv-phone','dlv-date','dlv-note'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+    sendDiscordOrder(order);
+  }).catch(function() {
+    sb.disabled = false; sb.textContent = '✅ Confirmer la commande';
+    toast('Erreur envoi — réessayez','err');
+  });
+}
+
+/* ════════════════════════════════════════
+   DISCORD
+════════════════════════════════════════ */
+function sendDiscord(body) {
+  fetch(DISCORD,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).catch(function(){});
+}
+
+function sendDiscordOrder(order) {
+  var lines = order.items.map(function(i){ return '• **'+i.name+'** × '+i.qty+' = '+fmtMoney(i.qty*i.price); }).join('\n');
+  sendDiscord({embeds:[{
+    title: '🛒 Nouvelle commande — '+order.company,
+    color: 7274479,
+    fields: [
+      {name:'👤 Contact', value: order.first_name+' '+order.last_name+(order.phone?' ('+order.phone+')':''), inline:true},
+      {name:'💰 Total',   value: fmtMoney(order.total), inline:true},
+      {name:'📦 Articles', value: lines||'—', inline:false},
+      {name:'📅 Livraison', value: order.delivery_date||'Non précisée', inline:true},
+      {name:'📝 Note',     value: order.note||'Aucune', inline:true}
+    ],
+    footer:{text:'LTD Grove Street • '+nowStr()}
+  }]});
+}
+
+/* ════════════════════════════════════════
+   HISTORY (client — temps réel)
+════════════════════════════════════════ */
+function renderHistory() {
+  var el = document.getElementById('tab-history');
+  if(!el) return;
+  var clientId = currentUser && currentUser.data ? currentUser.data.id : null;
+  if(!document.getElementById('hist-list')) {
+    el.innerHTML = '<div style="margin-bottom:12px"><select id="hist-filter" onchange="renderHistory()" style="background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.2);border-radius:7px;padding:7px 12px;color:#f1f5f9;font-size:12.5px;font-family:inherit;outline:none">'+
+      '<option value="">Tous statuts</option>'+
+      ['pending','preparing','delivered','cancelled'].map(function(s){return '<option value="'+s+'">'+{pending:'⏳ En attente',preparing:'🔧 En préparation',delivered:'✅ Livrée',cancelled:'❌ Annulée'}[s]+'</option>';}).join('')+
+      '</select><span style="margin-left:10px;font-size:11px;color:rgba(196,181,253,.4)"><span class="realtime-dot"></span>Mise à jour en temps réel</span></div>'+
+      '<div id="hist-list"></div>';
+    startClientRealtime();
+  }
+  var filter = document.getElementById('hist-filter') ? document.getElementById('hist-filter').value : '';
+  var q = 'client_id=eq.'+clientId+'&select=*&order=created_at.desc';
+  if(filter) q += '&status=eq.'+filter;
+  sbGet('orders',q).then(function(data) {
+    var orders = data || [];
+    var hl = document.getElementById('hist-list');
+    if(!hl) return;
+    if(!orders.length){ hl.innerHTML='<div style="color:rgba(196,181,253,.3);font-size:13px;padding:20px;text-align:center">Aucune commande</div>'; return; }
+    hl.innerHTML = orders.map(function(o){
+      return '<div class="ord-card">'+
+        '<div class="ord-card-hdr">'+
+          '<div><div class="ord-num">Commande #'+o.id.slice(-6).toUpperCase()+'</div><div class="ord-date">'+fmtDT(o.created_at)+'</div></div>'+
+          '<div class="ord-right">'+statusBadge(o.status)+'<span class="ord-total">'+fmtMoney(o.total)+'</span></div>'+
+        '</div>'+
+        '<div class="ord-items-row">'+o.items.map(function(i){return '<span class="ord-chip">'+esc(i.name)+' ×'+i.qty+'</span>';}).join('')+'</div>'+
+        (o.note?'<div style="padding:8px 15px;font-size:12px;color:rgba(196,181,253,.5);border-bottom:1px solid rgba(139,92,246,.06)">📝 '+esc(o.note)+'</div>':'')+
+        '<div class="ord-actions"><button class="btn btn-s btn-sm" data-id="'+o.id+'" onclick="reorder(this.dataset.id)">🔄 Renouveler</button></div>'+
+      '</div>';
+    }).join('');
+  });
+}
+
+function reorder(id) {
+  sbGet('orders','id=eq.'+id+'&select=items').then(function(data) {
+    if(!data || !data[0]) return;
+    cart = {};
+    data[0].items.forEach(function(it){
+      var prod = null;
+      for(var i=0;i<clientCatalog.length;i++){if(clientCatalog[i].id===it.id){prod=clientCatalog[i];break;}}
+      if(prod) cart[prod.id] = {id:prod.id,name:prod.name,price:prod.price,qty:it.qty};
+    });
+    goTab(document.querySelector('.cl-tab[data-tab="order"]'));
+    renderProducts(); renderCart();
+    toast('Commande recopiée dans le panier ✅','ok');
+  });
+}
+
+/* ════════════════════════════════════════
+   CLIENT CONTACTS
+════════════════════════════════════════ */
+function renderClientContacts() {
+  var el = document.getElementById('tab-contacts');
+  el.innerHTML = '<div class="spin-wrap"><div class="spin"></div></div>';
+  sbGet('contacts','select=*&order=created_at.asc').then(function(data) {
+    var contacts = data || [];
+    el.innerHTML = '<div class="card"><div class="card-title">🟣 Responsables LTD</div>'+
+      '<div class="contact-grid">'+
+      (contacts.length ? contacts.map(function(c) {
+        var init = ((c.first_name||'?')[0]+(c.last_name||'')[0]).toUpperCase();
+        return '<div class="contact-card">'+
+          '<div class="contact-av">'+init+'</div>'+
+          '<div class="contact-info">'+
+            '<strong>'+esc(c.first_name+' '+c.last_name)+'</strong>'+
+            (c.role?'<p>'+esc(c.role)+'</p>':'')+
+            (c.phone?'<p>📞 '+esc(c.phone)+'</p>':'')+
+          '</div>'+
+        '</div>';
+      }).join('') : '<p style="color:rgba(196,181,253,.3);font-size:12px;font-style:italic">Aucun responsable renseigné</p>')+
+      '</div></div>';
+  });
+}
+</script>
+</body>
+</html>
